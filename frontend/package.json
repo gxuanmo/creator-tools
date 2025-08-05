@@ -1,0 +1,36 @@
+{
+  "name": "frontend",
+  "version": "2.0.0",
+  "description": "创作者工具箱前端应用 - 基于Next.js的现代化工具集合",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@types/qrcode": "^1.5.5",
+    "browser-image-compression": "^2.0.2",
+    "file-saver": "^2.0.5",
+    "jspdf": "^3.0.1",
+    "jszip": "^3.10.1",
+    "next": "15.4.4",
+    "qrcode": "^1.5.4",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-dropzone": "^14.3.8"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
+    "@types/file-saver": "^2.0.7",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "eslint": "^9",
+    "eslint-config-next": "15.4.4",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
