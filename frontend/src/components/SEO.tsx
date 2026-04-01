@@ -3,7 +3,7 @@ import Head from 'next/head';
 interface SEOProps {
   title?: string;
   description?: string;
-  keywords?: string;
+  keywords?: string | string[];
   image?: string;
   url?: string;
   type?: 'website' | 'article';
@@ -26,13 +26,14 @@ export default function SEO({
   const fullTitle = title.includes('Creator Tools') ? title : `${title} - Creator Tools`;
   const fullUrl = url.startsWith('http') ? url : `https://creator-tools.com${url}`;
   const fullImage = image.startsWith('http') ? image : `https://creator-tools.com${image}`;
+  const keywordContent = Array.isArray(keywords) ? keywords.join(',') : keywords;
 
   return (
     <Head>
       {/* 基础元数据 */}
       <title>{fullTitle}</title>
       <meta name="description" content={description} />
-      <meta name="keywords" content={keywords} />
+      <meta name="keywords" content={keywordContent} />
       <meta name="author" content="Creator Tools Team" />
       <meta name="viewport" content="width=device-width, initial-scale=1" />
       <meta name="theme-color" content="#2563eb" />

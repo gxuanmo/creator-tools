@@ -21,6 +21,47 @@ interface GeneratedHeadline {
   isFavorite: boolean;
 }
 
+interface HeadlineApiResponse {
+  headlines?: string[];
+  data?: {
+    headlines?: Array<string | { title?: string; text?: string; platform?: string }>;
+  };
+}
+
+function parseHeadlineResponse(result: HeadlineApiResponse): GeneratedHeadline[] {
+  const rawHeadlines = result.headlines || result.data?.headlines || [];
+  const headlines = rawHeadlines
+    .map((headline) => {
+      if (typeof headline === 'string') {
+        return {
+          id: Math.random().toString(36).slice(2, 11),
+          text: headline,
+          template: '通用',
+          isFavorite: false,
+        };
+      }
+
+      const text = headline.title || headline.text;
+      if (!text) {
+        return null;
+      }
+
+      return {
+        id: Math.random().toString(36).slice(2, 11),
+        text,
+        template: headline.platform || '通用',
+        isFavorite: false,
+      };
+    })
+    .filter((headline): headline is GeneratedHeadline => headline !== null);
+
+  if (headlines.length === 0) {
+    throw new Error('接口已返回成功，但没有解析到可用标题');
+  }
+
+  return headlines;
+}
+
 /**
  * 标题生成器页面组件
  * 基于模板和关键词生成各种类型的标题
@@ -209,13 +250,8 @@ export default function HeadlineGeneratorPage() {
         throw new Error(errorData.message || '标题生成失败');
       }
 
-      const result = await response.json();
-      const headlines: GeneratedHeadline[] = result.data.headlines.map((headline: any, index: number) => ({
-        id: Math.random().toString(36).substr(2, 9),
-        text: headline.title,
-        template: headline.platform || '通用',
-        isFavorite: false
-      }));
+      const result: HeadlineApiResponse = await response.json();
+      const headlines = parseHeadlineResponse(result);
       
       setGeneratedHeadlines(headlines);
       toast.success('生成完成', `为您生成了 ${headlines.length} 个标题`);

@@ -125,7 +125,10 @@ export default function PerformanceMonitor() {
  * 性能监控Hook
  */
 export function usePerformanceMonitor() {
-  const [metrics, setMetrics] = useState<PerformanceMetrics | null>(null);
+  const [metrics, setMetrics] = useState<PerformanceMetrics>({
+    loadTime: 0,
+    renderTime: 0,
+  });
 
   useEffect(() => {
     const observer = new PerformanceObserver((list) => {

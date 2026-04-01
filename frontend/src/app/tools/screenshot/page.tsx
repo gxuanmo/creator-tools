@@ -65,7 +65,6 @@ export default function ScreenshotTool() {
       // 请求屏幕捕获权限
       const stream = await navigator.mediaDevices.getDisplayMedia({
         video: {
-          mediaSource: 'screen',
           width: { ideal: 1920 },
           height: { ideal: 1080 }
         },
@@ -256,7 +255,6 @@ export default function ScreenshotTool() {
       // 请求屏幕捕获权限
       const stream = await navigator.mediaDevices.getDisplayMedia({
         video: {
-          mediaSource: 'screen',
           width: { ideal: 1920 },
           height: { ideal: 1080 }
         },

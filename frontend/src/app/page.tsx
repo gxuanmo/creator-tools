@@ -71,38 +71,39 @@ export default function Home() {
   const { addToHistory } = useWorkspace();
   
   // 注册快捷键
-  const { registerShortcut, unregisterShortcut } = useKeyboardShortcuts();
+  const { registerShortcut } = useKeyboardShortcuts();
   
   useEffect(() => {
     // 注册全局快捷键
-    registerShortcut('open-workspace', {
-      ...DEFAULT_SHORTCUTS['open-workspace'],
+    const unregisterOpenWorkspace = registerShortcut({
+      ...DEFAULT_SHORTCUTS.OPEN_WORKSPACE,
       action: () => setShowWorkspace(true)
     });
     
-    registerShortcut('search-tools', {
-      ...DEFAULT_SHORTCUTS['search-tools'],
+    const unregisterSearchTools = registerShortcut({
+      ...DEFAULT_SHORTCUTS.SEARCH_TOOLS,
       action: () => setShowSearch(true)
     });
     
-    registerShortcut('show-help', {
-      ...DEFAULT_SHORTCUTS['show-help'],
+    const unregisterShowHelp = registerShortcut({
+      ...DEFAULT_SHORTCUTS.HELP,
       action: () => setShowShortcutHelp(true)
     });
     
     return () => {
-      unregisterShortcut('open-workspace');
-      unregisterShortcut('search-tools');
-      unregisterShortcut('show-help');
+      unregisterOpenWorkspace();
+      unregisterSearchTools();
+      unregisterShowHelp();
     };
-  }, [registerShortcut, unregisterShortcut]);
+  }, [registerShortcut]);
   
   // 处理工具点击
   const handleToolClick = (tool: Tool) => {
     addToHistory({
-      toolId: tool.id,
-      toolName: tool.name,
-      timestamp: Date.now()
+      id: tool.id,
+      name: tool.name,
+      href: tool.href,
+      icon: tool.icon,
     });
   };
   const tools: Tool[] = [
@@ -480,7 +481,7 @@ export default function Home() {
               </div>
             </div>
             <div className="p-6 overflow-y-auto max-h-[60vh]">
-              <Workspace />
+              <Workspace isOpen={showWorkspace} onClose={() => setShowWorkspace(false)} />
             </div>
           </div>
         </div>
@@ -494,7 +495,6 @@ export default function Home() {
               isOpen={showSearch}
               onClose={() => setShowSearch(false)}
               tools={tools}
-              onToolSelect={handleToolClick}
             />
           </div>
         </div>

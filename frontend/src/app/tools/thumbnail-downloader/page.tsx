@@ -15,14 +15,16 @@ interface ThumbnailQuality {
   urlSuffix: string;
 }
 
+interface ThumbnailItem {
+  quality: 'default' | 'medium' | 'high' | 'maxres';
+  url: string;
+  resolution: string;
+}
+
 interface VideoInfo {
   id: string;
   title: string;
-  thumbnails: {
-    quality: string;
-    url: string;
-    resolution: string;
-  }[];
+  thumbnails: ThumbnailItem[];
 }
 
 /**
@@ -33,32 +35,59 @@ export default function ThumbnailDownloaderPage() {
   const [videoUrl, setVideoUrl] = useState('');
   const [videoInfo, setVideoInfo] = useState<VideoInfo | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedQualities, setSelectedQualities] = useState<string[]>(['maxresdefault']);
+  const [selectedQualities, setSelectedQualities] = useState<string[]>(['maxres']);
   const [downloadHistory, setDownloadHistory] = useState<VideoInfo[]>([]);
   const toast = useToast();
 
   // YouTube缩略图质量选项
   const thumbnailQualities: ThumbnailQuality[] = [
-    {
-      id: 'maxresdefault',
+    /* {
+      id: 'maxres',
       name: '最高质量',
       resolution: '1280x720',
       urlSuffix: 'maxresdefault.jpg'
     },
     {
-      id: 'sddefault',
+      id: 'high',
       name: '标准质量',
-      resolution: '640x480',
-      urlSuffix: 'sddefault.jpg'
+      resolution: '480x360',
+      urlSuffix: 'hqdefault.jpg'
     },
     {
-      id: 'hqdefault',
+      id: 'medium',
+      name: '高质量',
+      resolution: '320x180',
+      urlSuffix: 'mqdefault.jpg'
+    },
+    {
+      id: 'default',
+      name: '中等质量',
+      resolution: '120x90',
+      urlSuffix: 'default.jpg'
+    },
+    /* {
+      id: 'placeholder-unused',
+      name: '默认质量',
+      resolution: '120x90',
+      urlSuffix: 'default.jpg'
+    } */
+  ];
+
+  const availableThumbnailQualities: ThumbnailQuality[] = [
+    {
+      id: 'maxres',
+      name: '最高质量',
+      resolution: '1280x720',
+      urlSuffix: 'maxresdefault.jpg'
+    },
+    {
+      id: 'high',
       name: '高质量',
       resolution: '480x360',
       urlSuffix: 'hqdefault.jpg'
     },
     {
-      id: 'mqdefault',
+      id: 'medium',
       name: '中等质量',
       resolution: '320x180',
       urlSuffix: 'mqdefault.jpg'
@@ -123,7 +152,7 @@ export default function ThumbnailDownloaderPage() {
       const { platform, videoId, thumbnails } = result.data;
 
       // 转换API响应格式为前端需要的格式
-      const thumbnailList = [
+      const thumbnailList: ThumbnailItem[] = [
         { quality: 'default', url: thumbnails.default, resolution: '120x90' },
         { quality: 'medium', url: thumbnails.medium, resolution: '320x180' },
         { quality: 'high', url: thumbnails.high, resolution: '480x360' },
@@ -174,7 +203,7 @@ export default function ThumbnailDownloaderPage() {
    * @param thumbnail 缩略图信息
    * @param filename 文件名
    */
-  const downloadSingleThumbnail = async (thumbnail: any, filename: string) => {
+  const downloadSingleThumbnail = async (thumbnail: ThumbnailItem, filename: string) => {
     try {
       const exists = await checkImageExists(thumbnail.url);
       if (!exists) {
@@ -209,10 +238,15 @@ export default function ThumbnailDownloaderPage() {
         selectedQualities.includes(thumb.quality)
       );
 
+      if (selectedThumbnails.length === 0) {
+        toast.warning('璇峰厛閫夋嫨鏈夋晥璐ㄩ噺', '褰撳墠閫夋嫨涓庤繑鍥炵殑缂╃暐鍥捐川閲忎笉鍖归厤');
+        return;
+      }
+
       if (selectedThumbnails.length === 1) {
         // 单个文件直接下载
         const thumbnail = selectedThumbnails[0];
-        const qualityName = thumbnailQualities.find(q => q.id === thumbnail.quality)?.name || thumbnail.quality;
+        const qualityName = availableThumbnailQualities.find(q => q.id === thumbnail.quality)?.name || thumbnail.quality;
         const filename = `${videoInfo.title}_${qualityName}_${thumbnail.resolution}.jpg`;
         await downloadSingleThumbnail(thumbnail, filename);
       } else {
@@ -224,7 +258,7 @@ export default function ThumbnailDownloaderPage() {
           if (exists) {
             const response = await fetch(thumbnail.url);
             const blob = await response.blob();
-            const qualityName = thumbnailQualities.find(q => q.id === thumbnail.quality)?.name || thumbnail.quality;
+            const qualityName = availableThumbnailQualities.find(q => q.id === thumbnail.quality)?.name || thumbnail.quality;
             const filename = `${qualityName}_${thumbnail.resolution}.jpg`;
             zip.file(filename, blob);
           }
@@ -232,7 +266,7 @@ export default function ThumbnailDownloaderPage() {
 
         const content = await zip.generateAsync({ type: 'blob' });
         saveAs(content, `${videoInfo.title}_thumbnails.zip`);
-        toast.success('批量下载完成', `${selectedQualities.length} 个缩略图已打包下载`);
+        toast.success('批量下载完成', `${selectedThumbnails.length} 个缩略图已打包下载`);
       }
     } catch (error) {
       console.error('批量下载失败:', error);
@@ -340,7 +374,7 @@ export default function ThumbnailDownloaderPage() {
                   选择下载质量
                 </label>
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
-                  {thumbnailQualities.map(quality => (
+                  {availableThumbnailQualities.map(quality => (
                     <label
                       key={quality.id}
                       className="flex items-center space-x-2 cursor-pointer"
@@ -381,7 +415,7 @@ export default function ThumbnailDownloaderPage() {
               </h3>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {videoInfo.thumbnails.map(thumbnail => {
-                  const quality = thumbnailQualities.find(q => q.id === thumbnail.quality);
+                  const quality = availableThumbnailQualities.find(q => q.id === thumbnail.quality);
                   const isSelected = selectedQualities.includes(thumbnail.quality);
                   
                   return (
