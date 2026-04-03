@@ -1,4 +1,13 @@
-import { IsString, IsOptional, IsIn, MinLength, MaxLength } from 'class-validator';
+import {
+  IsString,
+  IsOptional,
+  IsIn,
+  MinLength,
+  MaxLength,
+  IsInt,
+  Min,
+  Max,
+} from 'class-validator';
 
 /**
  * 生成标题请求DTO
@@ -25,7 +34,8 @@ export class GenerateHeadlineDto {
    */
   @IsOptional()
   @IsIn(['youtube', 'tiktok', 'instagram', 'twitter', 'blog', 'general'], {
-    message: '平台类型必须是: youtube, tiktok, instagram, twitter, blog, general 之一',
+    message:
+      '平台类型必须是: youtube, tiktok, instagram, twitter, blog, general 之一',
   })
   platform?: string;
 
@@ -34,7 +44,8 @@ export class GenerateHeadlineDto {
    */
   @IsOptional()
   @IsIn(['professional', 'casual', 'humorous', 'dramatic', 'informative'], {
-    message: '语调风格必须是: professional, casual, humorous, dramatic, informative 之一',
+    message:
+      '语调风格必须是: professional, casual, humorous, dramatic, informative 之一',
   })
   tone?: string;
 
@@ -42,6 +53,9 @@ export class GenerateHeadlineDto {
    * 生成数量（可选，默认5个）
    */
   @IsOptional()
+  @IsInt({ message: '生成数量必须是整数' })
+  @Min(1, { message: '生成数量不能小于1' })
+  @Max(20, { message: '生成数量不能超过20' })
   count?: number = 5;
 }
 

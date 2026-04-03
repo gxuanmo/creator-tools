@@ -1,6 +1,9 @@
 import { Controller, Post, Body, ValidationPipe } from '@nestjs/common';
 import { HeadlineService } from './headline.service';
-import { GenerateHeadlineDto, HeadlineResponseDto } from './dto/generate-headline.dto';
+import {
+  GenerateHeadlineDto,
+  HeadlineResponseDto,
+} from './dto/generate-headline.dto';
 
 /**
  * 标题生成器控制器
@@ -27,7 +30,7 @@ export class HeadlineController {
    * @returns {object} 服务状态
    */
   @Post('health')
-  async healthCheck(): Promise<{ status: string; timestamp: string }> {
+  healthCheck(): { status: string; timestamp: string } {
     return {
       status: 'ok',
       timestamp: new Date().toISOString(),
