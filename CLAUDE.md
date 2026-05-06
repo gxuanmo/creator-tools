@@ -1,6 +1,12 @@
-# 项目规则 (Project Rules for "creator-tools")
+# CLAUDE.md
 
-> **同步提醒**：本文件内容与项目根目录 `/CLAUDE.md` 保持一致。任何一边修改后，另一边也要同步更新。Trae IDE 读取本文件，Claude Code 读取 `/CLAUDE.md`。
+This file gives Claude Code project-specific guidance when working in this repo.
+Content mirrors `.trae/rules/project_rules.md` so the same rules apply across
+both Trae IDE and Claude Code; keep the two in sync if you change either.
+
+---
+
+# 项目规则 (Project Rules for "creator-tools")
 
 ## 1. 项目核心技术栈 (V2.0)
 - **前端**: Next.js (使用 App Router)
