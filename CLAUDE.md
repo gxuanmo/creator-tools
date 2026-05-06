@@ -1,8 +1,7 @@
 # CLAUDE.md
 
 This file gives Claude Code project-specific guidance when working in this repo.
-Content mirrors `.trae/rules/project_rules.md` so the same rules apply across
-both Trae IDE and Claude Code; keep the two in sync if you change either.
+It is the single source of truth for project rules.
 
 ---
 
