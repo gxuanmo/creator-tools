@@ -460,7 +460,7 @@ export default function SocialCoverGenerator() {
                   ) : (
                     <div className="text-center text-gray-500">
                       <div className="text-4xl mb-2">🖼️</div>
-                      <div>点击"生成封面"查看预览</div>
+                      <div>点击&ldquo;生成封面&rdquo;查看预览</div>
                     </div>
                   )}
                 </div>

@@ -382,7 +382,7 @@ export default function ImageConverterPage() {
             拖拽图片到此处
           </h3>
           <p className="text-gray-600 mb-4">
-            或点击上方"选择图片"按钮
+            或点击上方&ldquo;选择图片&rdquo;按钮
           </p>
           <p className="text-sm text-gray-500">
             支持 JPG、PNG、WebP 格式，单个文件最大 10MB

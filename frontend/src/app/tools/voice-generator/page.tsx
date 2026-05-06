@@ -162,7 +162,7 @@ export default function VoiceGenerator() {
       utterance.volume = options.volume;
 
       // 设置音频上下文用于录制
-      const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
       const destination = audioContext.createMediaStreamDestination();
       
       // 创建媒体录制器
@@ -432,8 +432,9 @@ export default function VoiceGenerator() {
    * 从本地存储加载克隆音色
    */
   useEffect(() => {
-    const savedVoices = JSON.parse(localStorage.getItem('clonedVoices') || '[]');
-    setClonedVoices(savedVoices.map((voice: any) => ({
+    const savedVoices: Array<Omit<ClonedVoice, 'createdAt'> & { createdAt: string | number | Date }> =
+      JSON.parse(localStorage.getItem('clonedVoices') || '[]');
+    setClonedVoices(savedVoices.map((voice) => ({
       ...voice,
       createdAt: new Date(voice.createdAt)
     })));
@@ -844,7 +845,7 @@ export default function VoiceGenerator() {
                   ) : (
                     <div className="text-center text-gray-500">
                       <div className="text-4xl mb-2">🎤</div>
-                      <div>点击"生成语音"创建音频文件</div>
+                      <div>点击&ldquo;生成语音&rdquo;创建音频文件</div>
                     </div>
                   )}
                 </div>
@@ -919,7 +920,7 @@ export default function VoiceGenerator() {
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex items-start space-x-2">
                     <span className="text-blue-600 font-bold">1.</span>
-                    <span>选择"系统语音"模式</span>
+                    <span>选择&ldquo;系统语音&rdquo;模式</span>
                   </div>
                   <div className="flex items-start space-x-2">
                     <span className="text-blue-600 font-bold">2.</span>
@@ -935,7 +936,7 @@ export default function VoiceGenerator() {
                   </div>
                   <div className="flex items-start space-x-2">
                     <span className="text-blue-600 font-bold">5.</span>
-                    <span>点击"试听"预览效果，生成并下载</span>
+                    <span>点击&ldquo;试听&rdquo;预览效果，生成并下载</span>
                   </div>
                 </div>
                 
@@ -943,7 +944,7 @@ export default function VoiceGenerator() {
                 <div className="space-y-2 text-sm text-gray-600">
                   <div className="flex items-start space-x-2">
                     <span className="text-purple-600 font-bold">1.</span>
-                    <span>选择"克隆音色"模式</span>
+                    <span>选择&ldquo;克隆音色&rdquo;模式</span>
                   </div>
                   <div className="flex items-start space-x-2">
                     <span className="text-purple-600 font-bold">2.</span>
@@ -955,7 +956,7 @@ export default function VoiceGenerator() {
                   </div>
                   <div className="flex items-start space-x-2">
                     <span className="text-purple-600 font-bold">4.</span>
-                    <span>点击"开始克隆音色"创建专属音色</span>
+                    <span>点击&ldquo;开始克隆音色&rdquo;创建专属音色</span>
                   </div>
                   <div className="flex items-start space-x-2">
                     <span className="text-purple-600 font-bold">5.</span>

@@ -495,6 +495,7 @@ export default function Home() {
               isOpen={showSearch}
               onClose={() => setShowSearch(false)}
               tools={tools}
+              onToolSelect={handleToolClick}
             />
           </div>
         </div>

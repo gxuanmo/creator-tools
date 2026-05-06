@@ -27,7 +27,7 @@ export interface WorkspaceProject {
   name: string;
   description?: string;
   toolId: string;
-  data: any; // 工具特定的数据
+  data: unknown; // 工具特定的数据
   createdAt: number;
   updatedAt: number;
 }
@@ -81,7 +81,7 @@ export function useWorkspace() {
   }, []);
 
   // 保存到localStorage
-  const saveToStorage = useCallback((key: string, data: any) => {
+  const saveToStorage = useCallback((key: string, data: unknown) => {
     try {
       localStorage.setItem(key, JSON.stringify(data));
     } catch (error) {

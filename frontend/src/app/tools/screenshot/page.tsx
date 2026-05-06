@@ -417,7 +417,6 @@ export default function ScreenshotTool() {
   ) => {
     const images: string[] = [];
     const scrollStep = Math.floor((area.endY - area.startY) * 0.8); // 80%重叠
-    let currentScroll = 0;
     const maxScrolls = 20; // 最大滚动次数，防止无限滚动
     let scrollCount = 0;
 

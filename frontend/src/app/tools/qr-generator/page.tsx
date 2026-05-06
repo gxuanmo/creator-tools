@@ -459,7 +459,7 @@ export default function QRGeneratorPage() {
                 ].map(({ type, label, icon }) => (
                   <button
                     key={type}
-                    onClick={() => setActiveType(type as any)}
+                    onClick={() => setActiveType(type as 'text' | 'url' | 'wifi' | 'contact')}
                     className={`p-3 rounded-lg border-2 transition-all ${
                       activeType === type
                         ? 'border-blue-500 bg-blue-50 text-blue-700'

@@ -384,7 +384,7 @@ export default function ColorToolsPage() {
           ].map(({ key, label, icon }) => (
             <button
               key={key}
-              onClick={() => setActiveTab(key as any)}
+              onClick={() => setActiveTab(key as 'converter' | 'palette' | 'picker' | 'extractor')}
               className={`mx-2 mb-2 px-6 py-3 rounded-lg font-medium transition-all ${
                 activeTab === key
                   ? 'bg-blue-600 text-white shadow-lg'
@@ -543,7 +543,7 @@ export default function ColorToolsPage() {
                 ].map(({ type, label, desc }) => (
                   <button
                     key={type}
-                    onClick={() => setPaletteType(type as any)}
+                    onClick={() => setPaletteType(type as 'monochromatic' | 'analogous' | 'complementary' | 'triadic' | 'tetradic')}
                     className={`p-4 rounded-lg border-2 text-left transition-all ${
                       paletteType === type
                         ? 'border-blue-500 bg-blue-50'

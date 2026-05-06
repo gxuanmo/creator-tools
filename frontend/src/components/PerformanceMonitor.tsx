@@ -31,10 +31,10 @@ export default function PerformanceMonitor() {
       const renderTime = paint.find(entry => entry.name === 'first-contentful-paint')?.startTime || 0;
       
       // 获取内存使用情况（如果支持）
-      const memoryUsage = (performance as any).memory?.usedJSHeapSize;
-      
+      const memoryUsage = (performance as Performance & { memory?: { usedJSHeapSize: number } }).memory?.usedJSHeapSize;
+
       // 获取网络连接类型（如果支持）
-      const connection = (navigator as any).connection;
+      const connection = (navigator as Navigator & { connection?: { effectiveType?: string } }).connection;
       const connectionType = connection?.effectiveType;
       
       setMetrics({

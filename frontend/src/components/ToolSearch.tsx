@@ -18,9 +18,10 @@ interface ToolSearchProps {
   isOpen: boolean;
   onClose: () => void;
   tools: Tool[];
+  onToolSelect?: (tool: Tool) => void;
 }
 
-export default function ToolSearch({ isOpen, onClose, tools }: ToolSearchProps) {
+export default function ToolSearch({ isOpen, onClose, tools, onToolSelect }: ToolSearchProps) {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [filteredTools, setFilteredTools] = useState<Tool[]>([]);
@@ -111,7 +112,9 @@ export default function ToolSearch({ isOpen, onClose, tools }: ToolSearchProps) 
         case 'Enter':
           e.preventDefault();
           if (filteredTools[selectedIndex]) {
-            router.push(filteredTools[selectedIndex].href);
+            const tool = filteredTools[selectedIndex];
+            onToolSelect?.(tool);
+            router.push(tool.href);
             onClose();
           }
           break;
@@ -124,7 +127,7 @@ export default function ToolSearch({ isOpen, onClose, tools }: ToolSearchProps) 
 
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, filteredTools, selectedIndex, router, onClose]);
+  }, [isOpen, filteredTools, selectedIndex, router, onClose, onToolSelect]);
 
   // 自动聚焦输入框
   useEffect(() => {
@@ -144,6 +147,7 @@ export default function ToolSearch({ isOpen, onClose, tools }: ToolSearchProps) 
   if (!isOpen) return null;
 
   const handleToolClick = (tool: Tool) => {
+    onToolSelect?.(tool);
     router.push(tool.href);
     onClose();
   };

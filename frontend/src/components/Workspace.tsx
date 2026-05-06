@@ -77,7 +77,7 @@ export default function Workspace({ isOpen, onClose }: WorkspaceProps) {
           ].map(tab => (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key as any)}
+              onClick={() => setActiveTab(tab.key as 'history' | 'favorites' | 'projects' | 'stats')}
               className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
                 activeTab === tab.key
                   ? 'border-blue-500 text-blue-600'

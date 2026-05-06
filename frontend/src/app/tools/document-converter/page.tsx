@@ -125,7 +125,7 @@ export default function DocumentConverter() {
    */
   const convertMarkdownToWord = useCallback(async (content: string): Promise<string> => {
     // 简单的Markdown到HTML转换
-    let html = content
+    const html = content
       .replace(/^# (.*$)/gim, '<h1>$1</h1>')
       .replace(/^## (.*$)/gim, '<h2>$1</h2>')
       .replace(/^### (.*$)/gim, '<h3>$1</h3>')
@@ -438,7 +438,7 @@ export default function DocumentConverter() {
               </div>
               <div className="flex items-start space-x-2">
                 <span className="text-blue-600 font-bold">4.</span>
-                <span>点击"开始转换"按钮</span>
+                <span>点击&ldquo;开始转换&rdquo;按钮</span>
               </div>
               <div className="flex items-start space-x-2">
                 <span className="text-blue-600 font-bold">5.</span>
