@@ -16,11 +16,22 @@ export class ConfigService {
    */
   private validateConfig(): void {
     const requiredKeys = ['OPENAI_API_KEY'];
-    
-    const missing = requiredKeys.filter(key => !this.nestConfigService.get(key));
+    const optionalKeys = ['MINIMAX_API_KEY'];
+
+    const missing = requiredKeys.filter(
+      (key) => !this.nestConfigService.get(key),
+    );
     if (missing.length > 0) {
-      console.warn(`Missing environment variables: ${missing.join(', ')}`);
-      console.warn('Some features may not work properly without these variables.');
+      console.warn(`⚠️  缺少必需的环境变量: ${missing.join(', ')}`);
+      console.warn('部分核心功能将无法正常工作。');
+    }
+
+    const missingOptional = optionalKeys.filter(
+      (key) => !this.nestConfigService.get(key),
+    );
+    if (missingOptional.length > 0) {
+      console.warn(`ℹ️  可选环境变量未配置: ${missingOptional.join(', ')}`);
+      console.warn('相关功能（如语音配音）将不可用。');
     }
   }
 
@@ -53,7 +64,7 @@ export class ConfigService {
    * @returns {number} 服务端口号
    */
   get port(): number {
-    return this.nestConfigService.get<number>('PORT') || 3002;
+    return this.nestConfigService.get<number>('PORT') || 3001;
   }
 
   /**
@@ -61,6 +72,9 @@ export class ConfigService {
    * @returns {string} CORS允许的源地址
    */
   get corsOrigin(): string {
-    return this.nestConfigService.get<string>('CORS_ORIGIN') || 'http://localhost:3000';
+    return (
+      this.nestConfigService.get<string>('CORS_ORIGIN') ||
+      'http://localhost:3000'
+    );
   }
 }

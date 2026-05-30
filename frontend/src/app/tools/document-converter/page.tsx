@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useCallback } from 'react';
+import DOMPurify from 'dompurify';
 import Link from 'next/link';
 import SEO, { seoConfigs } from '@/components/SEO';
 
@@ -148,7 +149,7 @@ export default function DocumentConverter() {
         </style>
       </head>
       <body>
-        ${html}
+        ${DOMPurify.sanitize(html)}
       </body>
       </html>
     `;

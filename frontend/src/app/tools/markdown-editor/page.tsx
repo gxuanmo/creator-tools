@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
+import DOMPurify from 'dompurify';
 import Link from 'next/link';
 import SEO, { seoConfigs } from '@/components/SEO';
 
@@ -61,8 +62,8 @@ export default function MarkdownEditor() {
     
     // 包装列表项
     html = html.replace(/(<li>.*<\/li>)/g, '<ul>$1</ul>');
-    
-    return html;
+
+    return DOMPurify.sanitize(html);
   };
 
   /**
@@ -268,7 +269,7 @@ export default function MarkdownEditor() {
     }, 0);
   };
 
-  // 从本地存储加载内容
+  // 从本地存储加载内容（仅挂载时执行一次）
   useEffect(() => {
     const savedContent = localStorage.getItem('markdown-editor-content');
     if (savedContent) {
@@ -276,6 +277,7 @@ export default function MarkdownEditor() {
     } else {
       handleContentChange(state.content);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

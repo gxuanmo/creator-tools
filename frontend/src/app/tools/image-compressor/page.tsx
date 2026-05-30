@@ -35,7 +35,7 @@ export default function ImageCompressorPage() {
    * @param file 原始图片文件
    * @returns 压缩后的图片信息
    */
-  const compressImage = async (file: File): Promise<CompressedImage> => {
+  const compressImage = useCallback(async (file: File): Promise<CompressedImage> => {
     try {
       const options = {
         maxSizeMB: 1,
@@ -64,7 +64,7 @@ export default function ImageCompressorPage() {
       toast.error('压缩失败', '处理图片时出现错误，请重试');
       throw error;
     }
-  };
+  }, [compressionQuality, toast]);
 
   /**
    * 处理文件上传
@@ -86,7 +86,7 @@ export default function ImageCompressorPage() {
         setIsCompressing(false);
       }
     },
-    [compressionQuality]
+    [compressImage, toast]
   );
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
@@ -272,6 +272,7 @@ export default function ImageCompressorPage() {
               >
                 {/* 图片预览 */}
                 <div className="w-20 h-20 bg-gray-100 rounded-lg overflow-hidden flex-shrink-0">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={image.preview}
                     alt={image.originalFile.name}

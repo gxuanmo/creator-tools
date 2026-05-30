@@ -159,7 +159,7 @@ export default function ImageConverterPage() {
     } finally {
       setIsConverting(false);
     }
-  }, [targetFormat, quality, convertImage]);
+  }, [targetFormat, quality, convertImage, toast]);
 
   /**
    * 处理拖拽上传
@@ -198,7 +198,7 @@ export default function ImageConverterPage() {
     document.body.removeChild(link);
     
     toast.success('图片下载已开始');
-  }, []);
+  }, [toast]);
 
   /**
    * 批量下载所有图片
@@ -239,7 +239,7 @@ export default function ImageConverterPage() {
       console.error('批量下载失败:', error);
       toast.error('批量下载失败');
     }
-  }, [images, downloadImage]);
+  }, [images, downloadImage, toast]);
 
   /**
    * 清空所有图片
@@ -255,7 +255,7 @@ export default function ImageConverterPage() {
     
     setImages([]);
     toast.info('已清空所有图片');
-  }, [images]);
+  }, [images, toast]);
 
   /**
    * 删除单个图片
@@ -443,6 +443,7 @@ export default function ImageConverterPage() {
               <div key={image.id} className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
                 {/* 图片预览 */}
                 <div className="aspect-video bg-gray-100 relative">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={image.convertedUrl}
                     alt="转换后的图片"

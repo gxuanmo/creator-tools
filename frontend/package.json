@@ -7,15 +7,17 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "type-check": "tsc --noEmit"
   },
   "dependencies": {
     "@types/qrcode": "^1.5.5",
     "browser-image-compression": "^2.0.2",
+    "dompurify": "^3.4.2",
     "file-saver": "^2.0.5",
-    "jspdf": "^3.0.1",
+    "jspdf": "^4.2.1",
     "jszip": "^3.10.1",
-    "next": "15.4.4",
+    "next": "15.5.18",
     "qrcode": "^1.5.4",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -28,8 +30,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "eslint": "^9",
-    "eslint-config-next": "15.4.4",
+    "@typescript-eslint/eslint-plugin": "^8.38.0",
+    "@typescript-eslint/parser": "^8.38.0",
+    "eslint": "^9.32.0",
+    "eslint-config-next": "15.5.18",
     "tailwindcss": "^4",
     "typescript": "^5"
   }

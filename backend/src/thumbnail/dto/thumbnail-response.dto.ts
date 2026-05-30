@@ -1,21 +1,37 @@
 import { ApiProperty } from '@nestjs/swagger';
 
 export class ThumbnailQuality {
-  @ApiProperty({ description: '默认质量缩略图URL', example: 'https://img.youtube.com/vi/dQw4w9WgXcQ/default.jpg' })
+  @ApiProperty({
+    description: '默认质量缩略图URL',
+    example: 'https://img.youtube.com/vi/dQw4w9WgXcQ/default.jpg',
+  })
   default: string;
 
-  @ApiProperty({ description: '中等质量缩略图URL', example: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg' })
+  @ApiProperty({
+    description: '中等质量缩略图URL',
+    example: 'https://img.youtube.com/vi/dQw4w9WgXcQ/mqdefault.jpg',
+  })
   medium: string;
 
-  @ApiProperty({ description: '高质量缩略图URL', example: 'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg' })
+  @ApiProperty({
+    description: '高质量缩略图URL',
+    example: 'https://img.youtube.com/vi/dQw4w9WgXcQ/hqdefault.jpg',
+  })
   high: string;
 
-  @ApiProperty({ description: '最高质量缩略图URL', example: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg' })
+  @ApiProperty({
+    description: '最高质量缩略图URL',
+    example: 'https://img.youtube.com/vi/dQw4w9WgXcQ/maxresdefault.jpg',
+  })
   maxres: string;
 }
 
 export class ThumbnailData {
-  @ApiProperty({ description: '视频平台', example: 'youtube', enum: ['youtube', 'bilibili'] })
+  @ApiProperty({
+    description: '视频平台',
+    example: 'youtube',
+    enum: ['youtube', 'bilibili'],
+  })
   platform: string;
 
   @ApiProperty({ description: '视频ID', example: 'dQw4w9WgXcQ' })
@@ -37,12 +53,12 @@ export class ThumbnailErrorDto {
   @ApiProperty({ description: '请求是否成功', example: false })
   success: boolean;
 
-  @ApiProperty({ 
+  @ApiProperty({
     description: '错误信息',
     example: {
       code: 'INVALID_URL',
-      message: '无效的视频链接'
-    }
+      message: '无效的视频链接',
+    },
   })
   error: {
     code: string;

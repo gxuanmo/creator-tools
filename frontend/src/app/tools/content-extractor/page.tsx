@@ -475,6 +475,7 @@ export default function ContentExtractor() {
                     {/* 缩略图 */}
                     {extractedContent.thumbnail && (
                       <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={extractedContent.thumbnail}
                           alt={extractedContent.title}

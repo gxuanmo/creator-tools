@@ -405,6 +405,8 @@ export default function ScreenshotTool() {
       setIsCapturing(false);
       setIsScrolling(false);
     }
+    // performScrollScreenshot defined below to avoid circular deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [checkScreenCaptureSupport]);
 
   /**
@@ -740,6 +742,7 @@ export default function ScreenshotTool() {
             <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">截图预览</h3>
               <div className="border border-gray-200 rounded-lg overflow-hidden">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={capturedImage}
                   alt="截图预览"

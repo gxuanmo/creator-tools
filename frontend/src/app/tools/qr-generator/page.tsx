@@ -96,7 +96,7 @@ export default function QRGeneratorPage() {
   /**
    * 获取当前内容和显示文本
    */
-  const getCurrentContent = (): { content: string; displayText: string } => {
+  const getCurrentContent = useCallback((): { content: string; displayText: string } => {
     switch (activeType) {
       case 'text':
       case 'url':
@@ -117,7 +117,7 @@ export default function QRGeneratorPage() {
       default:
         return { content: '', displayText: '' };
     }
-  };
+  }, [activeType, textContent, wifiConfig, contactConfig]);
 
   /**
    * 生成二维码
@@ -186,7 +186,7 @@ export default function QRGeneratorPage() {
     } finally {
       setIsGenerating(false);
     }
-  }, [activeType, textContent, wifiConfig, contactConfig, size, color, backgroundColor]);
+  }, [activeType, wifiConfig, contactConfig, size, color, backgroundColor, toast, getCurrentContent]);
 
   /**
    * 验证URL格式
@@ -212,7 +212,7 @@ export default function QRGeneratorPage() {
     document.body.removeChild(link);
     
     toast.success('二维码下载已开始');
-  }, []);
+  }, [toast]);
 
   /**
    * 复制二维码内容
@@ -224,7 +224,7 @@ export default function QRGeneratorPage() {
     } catch (error) {
       toast.error('复制失败');
     }
-  }, []);
+  }, [toast]);
 
   /**
    * 删除二维码
@@ -232,7 +232,7 @@ export default function QRGeneratorPage() {
   const deleteQRCode = useCallback((id: string) => {
     setQrCodes(prev => prev.filter(qr => qr.id !== id));
     toast.info('二维码已删除');
-  }, []);
+  }, [toast]);
 
   /**
    * 清空所有二维码
@@ -240,7 +240,7 @@ export default function QRGeneratorPage() {
   const clearAllQRCodes = useCallback(() => {
     setQrCodes([]);
     toast.info('已清空所有二维码');
-  }, []);
+  }, [toast]);
 
 
 
@@ -567,6 +567,7 @@ export default function QRGeneratorPage() {
                   {qrCodes.map((qrCode) => (
                     <div key={qrCode.id} className="border border-gray-200 rounded-lg p-4">
                       <div className="flex items-start space-x-3">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={qrCode.dataUrl}
                           alt="二维码"

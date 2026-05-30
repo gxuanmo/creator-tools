@@ -271,7 +271,7 @@ export default function ColorToolsPage() {
       img.src = e.target?.result as string;
     };
     reader.readAsDataURL(file);
-  }, []);
+  }, [toast]);
 
   /**
    * 提取主要颜色
@@ -327,7 +327,7 @@ export default function ColorToolsPage() {
     
     setPalettes(prev => [newPalette, ...prev]);
     toast.success('调色板保存成功');
-  }, [paletteColors]);
+  }, [paletteColors, toast]);
 
   /**
    * 复制颜色值
@@ -339,7 +339,7 @@ export default function ColorToolsPage() {
     } catch (error) {
       toast.error('复制失败');
     }
-  }, []);
+  }, [toast]);
 
 
 

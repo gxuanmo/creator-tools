@@ -15,7 +15,7 @@
     "lint:backend": "cd backend && npm run lint",
     "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "type-check": "npm run type-check:frontend && npm run type-check:backend",
-    "type-check:frontend": "cd frontend && npm run type-check",
+    "type-check:frontend": "cd frontend && npx tsc --noEmit",
     "type-check:backend": "cd backend && npm run build"
   },
   "devDependencies": {

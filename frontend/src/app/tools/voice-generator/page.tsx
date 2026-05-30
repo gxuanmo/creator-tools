@@ -228,6 +228,8 @@ export default function VoiceGenerator() {
       setError(err instanceof Error ? err.message : '生成失败，请重试');
       setIsGenerating(false);
     }
+    // generateWithClonedVoice defined below; captured via closure
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options]);
 
   /**
@@ -277,28 +279,27 @@ export default function VoiceGenerator() {
     speechSynthesis.speak(utterance);
   }, [options]);
 
+  const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3001';
+
   /**
-   * 上传音频文件到MiniMax API
+   * 上传音频文件（通过后端代理）
    */
   const uploadAudioFile = async (file: File): Promise<string> => {
     const formData = new FormData();
     formData.append('file', file);
-    formData.append('purpose', 'voice_clone');
 
-    const response = await fetch('https://api.minimaxi.chat/v1/files/upload', {
+    const response = await fetch(`${apiUrl}/api/voice/upload`, {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${process.env.NEXT_PUBLIC_MINIMAX_API_KEY}`,
-      },
-      body: formData
+      body: formData,
     });
 
     if (!response.ok) {
-      throw new Error('文件上传失败');
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.message || '文件上传失败');
     }
 
     const data = await response.json();
-    return data.file.file_id;
+    return data.fileId;
   };
 
   /**
@@ -318,34 +319,28 @@ export default function VoiceGenerator() {
       const fileId = await uploadAudioFile(cloneOptions.audioFile);
 
       // 2. 创建音色克隆
-      const cloneResponse = await fetch('https://api.minimaxi.chat/v1/voice_clone', {
+      const cloneResponse = await fetch(`${apiUrl}/api/voice/clone`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_MINIMAX_API_KEY}`,
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          file_id: fileId,
-          voice_name: cloneOptions.voiceName,
+          fileId,
+          voiceName: cloneOptions.voiceName,
           transcript: cloneOptions.transcript || undefined,
-          preview: {
-            text: '这是音色克隆的预览效果，您可以听听是否满意。',
-            model: 'speech-01-hd'
-          }
-        })
+        }),
       });
 
       if (!cloneResponse.ok) {
-        throw new Error('音色克隆失败');
+        const err = await cloneResponse.json().catch(() => ({}));
+        throw new Error(err.message || '音色克隆失败');
       }
 
       const cloneData = await cloneResponse.json();
       
       // 3. 保存克隆的音色
       const newClonedVoice: ClonedVoice = {
-        id: cloneData.voice_id,
+        id: cloneData.voiceId,
         name: cloneOptions.voiceName,
-        previewUrl: cloneData.preview_audio,
+        previewUrl: cloneData.previewAudio,
         createdAt: new Date()
       };
 
@@ -369,6 +364,8 @@ export default function VoiceGenerator() {
     } finally {
       setIsCloning(false);
     }
+    // apiUrl and uploadAudioFile are stable module-level references
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cloneOptions]);
 
   /**
@@ -385,20 +382,16 @@ export default function VoiceGenerator() {
       setError(null);
       setGeneratedAudio(null);
 
-      const response = await fetch('https://api.minimaxi.chat/v1/t2a_v2', {
+      const response = await fetch(`${apiUrl}/api/voice/generate`, {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${process.env.NEXT_PUBLIC_MINIMAX_API_KEY}`,
-          'Content-Type': 'application/json'
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'speech-01-hd',
           text: options.text,
-          voice_id: options.clonedVoiceId,
+          voiceId: options.clonedVoiceId,
           speed: options.rate,
-          vol: options.volume,
-          pitch: options.pitch
-        })
+          volume: options.volume,
+          pitch: options.pitch,
+        }),
       });
 
       if (!response.ok) {
@@ -407,8 +400,7 @@ export default function VoiceGenerator() {
 
       const data = await response.json();
       
-      // 下载音频文件
-      const audioResponse = await fetch(data.audio_url);
+      const audioResponse = await fetch(data.audioUrl);
       const audioBlob = await audioResponse.blob();
       const audioUrl = URL.createObjectURL(audioBlob);
       const fileName = `cloned_voice_${Date.now()}.mp3`;
@@ -426,6 +418,8 @@ export default function VoiceGenerator() {
     } finally {
       setIsGenerating(false);
     }
+    // apiUrl is a stable env-based reference
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options]);
 
   /**
@@ -477,7 +471,7 @@ export default function VoiceGenerator() {
     setGeneratedAudio(null);
     setError(null);
     setCloneError(null);
-  }, [availableVoices]);
+  }, [availableVoices, handleStop]);
 
   return (
     <>

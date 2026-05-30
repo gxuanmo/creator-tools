@@ -5,6 +5,6 @@ import { ThumbnailService } from './thumbnail.service';
 @Module({
   controllers: [ThumbnailController],
   providers: [ThumbnailService],
-  exports: [ThumbnailService]
+  exports: [ThumbnailService],
 })
 export class ThumbnailModule {}

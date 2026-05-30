@@ -39,40 +39,6 @@ export default function ThumbnailDownloaderPage() {
   const [downloadHistory, setDownloadHistory] = useState<VideoInfo[]>([]);
   const toast = useToast();
 
-  // YouTube缩略图质量选项
-  const thumbnailQualities: ThumbnailQuality[] = [
-    /* {
-      id: 'maxres',
-      name: '最高质量',
-      resolution: '1280x720',
-      urlSuffix: 'maxresdefault.jpg'
-    },
-    {
-      id: 'high',
-      name: '标准质量',
-      resolution: '480x360',
-      urlSuffix: 'hqdefault.jpg'
-    },
-    {
-      id: 'medium',
-      name: '高质量',
-      resolution: '320x180',
-      urlSuffix: 'mqdefault.jpg'
-    },
-    {
-      id: 'default',
-      name: '中等质量',
-      resolution: '120x90',
-      urlSuffix: 'default.jpg'
-    },
-    /* {
-      id: 'placeholder-unused',
-      name: '默认质量',
-      resolution: '120x90',
-      urlSuffix: 'default.jpg'
-    } */
-  ];
-
   const availableThumbnailQualities: ThumbnailQuality[] = [
     {
       id: 'maxres',
@@ -426,6 +392,7 @@ export default function ThumbnailDownloaderPage() {
                       }`}
                     >
                       <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden mb-3">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img
                           src={thumbnail.url}
                           alt={`${quality?.name} 缩略图`}
@@ -489,6 +456,7 @@ export default function ThumbnailDownloaderPage() {
                   onClick={() => loadFromHistory(video)}
                 >
                   <div className="aspect-video bg-gray-100 rounded mb-2 overflow-hidden">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={`https://img.youtube.com/vi/${video.id}/mqdefault.jpg`}
                       alt="缩略图"

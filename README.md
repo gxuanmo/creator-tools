@@ -58,10 +58,11 @@
 
 ### 技术栈
 
-- **前端**: Next.js 15.4.4 (App Router + Turbopack) + TypeScript 5 + React 19.1.0
+- **前端**: Next.js 15.5.18 (App Router + Turbopack) + TypeScript 5 + React 19.1.0
 - **样式**: Tailwind CSS 4
-- **后端**: NestJS + TypeScript (已实现缩略图API和标题生成API)
-- **AI服务**: OpenAI API (标题生成)
+- **后端**: NestJS + TypeScript (缩略图API / 标题生成API / 配音API)
+- **AI服务**: OpenAI API (标题生成) + MiniMax API (配音音色克隆)
+- **包管理器**: pnpm
 - **部署**: Vercel (前端) + Render/Railway (后端)
 - **开发工具**: ESLint + Prettier
 
@@ -85,6 +86,10 @@ creator-tools/
 │   │   ├── app.controller.ts    # 主控制器
 │   │   ├── app.module.ts        # 主模块
 │   │   ├── app.service.ts       # 主服务
+│   │   ├── config/              # 配置模块
+│   │   ├── headline/            # AI 标题生成
+│   │   ├── thumbnail/           # 缩略图下载
+│   │   ├── voice/               # AI 配音（MiniMax 音色克隆）
 │   │   └── main.ts             # 应用入口
 │   ├── test/         # 测试文件
 │   └── package.json  # 后端依赖配置
@@ -110,15 +115,7 @@ creator-tools/
 git clone https://github.com/your-username/creator-tools.git
 cd creator-tools
 
-# 安装根目录依赖
-pnpm install
-
-# 安装前端依赖
-cd frontend
-pnpm install
-
-# 安装后端依赖
-cd ../backend
+# pnpm workspace 一键安装所有依赖
 pnpm install
 ```
 
@@ -174,24 +171,26 @@ perf: 性能优化
 ## 🧪 测试
 
 ```bash
-# 运行所有测试
-pnpm test
-
-# 运行前端测试
-cd frontend && pnpm test
-
 # 运行后端测试
 cd backend && pnpm test
 
+# 运行后端端到端测试
+cd backend && pnpm test:e2e
+
 # 生成测试覆盖率报告
-pnpm test:coverage
+cd backend && pnpm test:cov
 ```
+
+> 前端测试暂未覆盖，欢迎贡献。
 
 ## 📦 构建部署
 
 ### 本地构建
 
 ```bash
+# 类型检查
+pnpm type-check
+
 # 构建前端项目
 cd frontend && pnpm build
 

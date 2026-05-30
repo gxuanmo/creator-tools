@@ -188,3 +188,7 @@ temp/
 
 # Turbo
 .turbo
+
+# Claude Code checkup
+.claude/checkup-state.json
+.claude/checkup-reports/

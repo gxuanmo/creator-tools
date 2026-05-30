@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useMemo } from 'react';
 import Link from 'next/link';
 import SEO, { seoConfigs } from '@/components/SEO';
 
@@ -58,7 +58,7 @@ export default function SocialCoverGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   // 预定义模板
-  const templates: CoverTemplate[] = [
+  const templates: CoverTemplate[] = useMemo(() => [
     {
       id: 'youtube',
       name: 'YouTube封面',
@@ -107,7 +107,7 @@ export default function SocialCoverGenerator() {
       description: '16:9比例，适用于B站视频封面',
       gradient: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)'
     }
-  ];
+  ], []);
 
   /**
    * 生成封面图片
@@ -448,6 +448,7 @@ export default function SocialCoverGenerator() {
                 <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 min-h-[300px] flex items-center justify-center">
                   {generatedCover ? (
                     <div className="text-center">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
                       <img
                         src={generatedCover.dataUrl}
                         alt="生成的封面"

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, createContext, useContext, useCallback } from 'react';
+import { useState, useEffect, createContext, useContext, useCallback, useMemo } from 'react';
 
 type ToastType = 'success' | 'error' | 'warning' | 'info';
 
@@ -142,7 +142,7 @@ export function useToast() {
 
   const { addToast } = context;
 
-  const toast = {
+  const toast = useMemo(() => ({
     success: (title: string, message?: string, duration?: number) => {
       addToast({ type: 'success', title, message, duration });
     },
@@ -155,7 +155,7 @@ export function useToast() {
     info: (title: string, message?: string, duration?: number) => {
       addToast({ type: 'info', title, message, duration });
     }
-  };
+  }), [addToast]);
 
   return toast;
 }

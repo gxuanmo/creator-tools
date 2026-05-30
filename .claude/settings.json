@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm test)",
+      "Bash(npm run *)",
+      "Bash(pnpm *)",
+      "Bash(npx tsc --noEmit)",
+      "Bash(npx next *)",
+      "Bash(npx nest *)",
+      "Bash(git *)"
+    ],
+    "defaultMode": "default"
+  }
+}
